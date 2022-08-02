@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<title>speech-commands</title>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="JS/tf.min.js"></script>
+    <script src="JS/tensorflow-models/speech-commands.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4"></script> -->
+    <script src="JS/newrecognizer.js"></script>
+
+    <script src="https://kit.fontawesome.com/437693bd92.js" crossorigin="anonymous"></script>
+    <style>
+        #wrapper {
+            max-width: 575.98px !important;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-row justify-content-center">
+    <div id="wrapper" class="disabled">
+        <div class="content-page">
+            <div class="content">
+                <div class="page-content-wrapper ">
+                    <div class="container-fluid p-3">
+
+                        <div class="row my-2" hidden>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <p>Please select type:</p>
+                                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                        <input type="radio" class="btn-check" onclick="ordinaryEvent()" name="btnradio" id="ordinary" value="1" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="ordinary">Ordinary</label>
+
+                                        <input type="radio" id="learning" value="2" onclick="learningEvent()" class="btn-check" name="btnradio" autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="learning">Learning</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row my-2" id="ordinaryArea" hidden>
+                            <div class="col-12">
+                                <button id="listenOrdinary" onclick="ordinaryListen()">Listen ordinary</button>
+                            </div>
+                        </div>
+
+                        <div class="row my-2" id="learningArea">
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <!-- <label class="label-control">Choose command:</label> -->
+                                    <div id="buttonParrent" class="d-flex align-content-stretch flex-wrap">
+                                        <button id="one" onmousedown="collect('one')" class="btn btn-outline-info  m-1">One</button>
+                                        <button id="two" onmousedown="collect('two')" class="btn btn-outline-info  m-1"> two </button>
+                                        <button id="three" onmousedown="collect('three')" class="btn btn-outline-info  m-1"> three</button>
+                                        <button id="four" onmousedown="collect('four')" class="btn btn-outline-info  m-1"> four </button>
+                                        <button id="five" onmousedown="collect('five')" class="btn btn-outline-info  m-1"> five </button>
+                                        <button id="six" onmousedown="collect('six')" class="btn btn-outline-info  m-1"> six </button>
+                                        <button id="seven" onmousedown="collect('seven')" class="btn btn-outline-info  m-1"> seven</button>
+                                        <button id="eight" onmousedown="collect('eight')" class="btn btn-outline-info  m-1"> eight</button>
+                                        <button id="nine" onmousedown="collect('nine')" class="btn btn-outline-info  m-1"> nine </button>
+                                        <button id="ten" onmousedown="collect('ten')" class="btn btn-outline-info  m-1"> ten </button>
+                                        <button id="up" onmousedown="collect('up')" class="btn btn-outline-info  m-1"> up </button>
+                                        <button id="down" onmousedown="collect('down')" class="btn btn-outline-info  m-1"> down </button>
+                                        <button id="right" onmousedown="collect('right')" class="btn btn-outline-info  m-1"> right</button>
+                                        <button id="left" onmousedown="collect('left')" class="btn btn-outline-info  m-1"> left </button>
+                                        <button id="ok" onmousedown="collect('ok')" class="btn btn-outline-info  m-1"> ok </button>
+                                        <button id="cancel" onmousedown="collect('cancel')" class="btn btn-outline-info  m-1">
+                      cancel</button>
+                                        <button id="stop" onmousedown="collect('stop')" class="btn btn-outline-info  m-1"> stop </button>
+                                        <button id="yes" onmousedown="collect('yes')" class="btn btn-outline-info  m-1"> yes </button>
+                                        <button id="no" onmousedown="collect('no')" class="btn btn-outline-info  m-1"> no </button>
+                                        <button id="go" onmousedown="collect('go')" class="btn btn-outline-info  m-1"> go </button>
+                                        <button id="noise" onmousedown="collect('_background_noise_')" class="btn btn-outline-info  m-1">noise
+                    </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 text-center mt-2 mb-2">
+                                <button type="button" id="train" onclick="train()" class="btn btn-info text-white"><i
+                    class="fas fa-microphone"></i>&nbsp;Train</button>&nbsp;
+                                <button type="button" id="listen" onclick="listen()" class="btn btn-warning"><i
+                    class="fas fa-volume-up"></i>&nbsp;Listen trained</button>
+                            </div>
+
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-12">
+                                <code id="console"></code>
+                            </div>
+                        </div>
+
+                        <footer class="mb-3 mt-5">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <button type="button" id="SaveModel" class="btn btn-success text-white" onclick="SaveModel()"><i
+                      class="fas fa-save"></i>&nbsp;Save Model</button>
+                                    <button type="button" id="LoadModel" class="btn btn-info text-white" onclick="LoadModel()"><i
+                      class="fas fa-folder-open"></i>&nbsp;Load Model</button>
+                                    <!-- <button type="button" id="ListenAfterLoad" class="btn btn-warning" onclick="listen()"><i
+                      class="fas fa-assistive-listening-systems"></i>&nbsp;Listen</button> -->
+                                </div>
+                            </div>
+                        </footer>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        try {
+
+            //get all childrens of div tag
+            var buttonParrent = document.getElementById("buttonParrent");
+            console.log(buttonParrent.children.length);
+
+
+            buttonParrent.children.forEach(element => {
+                console.log(element);
+                document.getElementById(element.id).classList.add("disabled");
+            });
+
+
+
+
+
+
+            // document.getElementById("buttonParrent").children.forEach(element => {
+            //     element.addClass("disabled");
+            // });
+
+            var ordinary_area = document.getElementById("ordinaryArea");
+            var learning_area = document.getElementById("learningArea");
+            // learningEvent();
+
+            function ordinaryEvent() {
+                learning_area.setAttribute('hidden', true);
+                ordinary_area.removeAttribute('hidden');
+                document.getElementById('listenOrdinary').disabled = true;
+                (async() => await ordinaryApp().then(
+                    document.getElementById('listenOrdinary').disabled = false
+                ))();
+            }
+
+            function learningEvent() {
+                learning_area.removeAttribute('hidden');
+                ordinary_area.setAttribute('hidden', true);
+                (async() => await app())();
+            }
+
+            learningEvent();
+
+
+            buttonParrent.children.forEach(element => {
+                console.log(element);
+                document.getElementById(element.id).classList.remove("disabled");
+            });
+
+        } catch (e) {
+            document.querySelector('#console').textContent = e.message;
+        }
+    </script>
+
+</body>
+
+</html>
