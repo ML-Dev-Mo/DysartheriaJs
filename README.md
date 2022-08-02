@@ -7,7 +7,7 @@ When the project has started the user can define as many commands as he wants an
 After examples collected successfuly the training will be started and after about 5-10 seconds the model will be created.
 This model can be saved in the browser or also can be sent to server's api for future use.
 
-The project used some packages to get the user voice and digitize it with some fourier transorfamation which is not may be available in react_native.
+The project used some packages to get the user voice and digitize it with some fourier transorfamation which is may not be available in react_native.
 This work has been done with the help of TF.js
 
 Made by Mohammad Dehghani
